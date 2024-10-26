@@ -1,0 +1,24 @@
+{
+  "name": "auth-svc",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "push": "pnpm drizzle-kit push"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.1",
+    "@node-rs/argon2": "^2.0.0",
+    "drizzle-orm": "^0.34.1",
+    "hono": "^4.6.3",
+    "nanoid": "^5.0.7",
+    "pg": "^8.13.0",
+    "redis": "^4.7.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "@types/pg": "^8.11.10",
+    "@types/redis": "^4.0.11",
+    "drizzle-kit": "^0.25.0",
+    "tsx": "^4.7.1"
+  }
+}

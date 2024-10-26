@@ -1,0 +1,4 @@
+.env
+client/node_modules
+auth-svc/node_modules
+diagrams/*

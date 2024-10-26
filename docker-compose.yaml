@@ -1,0 +1,61 @@
+services:
+  client-svc:
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - /usr/src/app/node_modules
+      - ./client/src:/usr/src/app/src
+    environment:
+      - DEBUG=*
+    networks:
+      - app-network
+
+  auth-svc:
+    build:
+      context: ./auth-svc
+      dockerfile: dev.Dockerfile
+    ports:
+      - '3333:3000'
+    volumes:
+      - ./auth-svc:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - DEBUG=*
+      - NODE_ENV=${NODE_ENV-production}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+      - COOKIE_SECRET=${COOKIE_SECRET}
+      - DATABASE_URL=${AUTH_SERVICE__DATABASE_URL}
+      - REDIS_URL=${AUTH_SERVICE__REDIS_URL}
+      - SECRET_NOTE=${AUTH_SERVICE__SECRET_NOTE}
+    networks:
+      - auth-network
+      - app-network
+
+  auth-postgres-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${AUTH_SERVICE__POSTGRES_USER}
+      POSTGRES_PASSWORD: ${AUTH_SERVICE__POSTGRES_PASSWORD}
+      POSTGRES_DB: ${AUTH_SERVICE__POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - auth-network
+
+  auth-redis:
+    image: redis:7-alpine
+    networks:
+      - auth-network
+
+volumes:
+  postgres_data:
+
+networks:
+  auth-network:
+  app-network:
