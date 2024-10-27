@@ -2,6 +2,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
 import { env } from '@/config';
 import { showRoutes } from 'hono/dev';
 import { initRedis } from '@/lib/redis';
@@ -15,7 +16,7 @@ import { signupRouter } from '@/routes/signup';
 import { refreshRouter } from '@/routes/refresh';
 
 const app = new Hono();
-
+app.use(logger());
 app.use(
   '*',
   cors({
