@@ -2,7 +2,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { authStore } from '$lib/stores/authStore';
 	import type { ActionResult, SubmitFunction } from '@sveltejs/kit';
 
 	let username: string = '';
@@ -14,7 +13,6 @@
 			if (result.type === 'success') {
 				if (result.data?.success) {
 					console.log('Login successful');
-					authStore.login();
 					goto(result.data.redirectTo);
 				} else {
 					errorMessage = result.data?.message || 'Login failed';

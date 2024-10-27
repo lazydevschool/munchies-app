@@ -1,6 +1,6 @@
 // client/src/routes/login/+page.server.ts
 
-import { redirect, fail } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { Actions } from '@sveltejs/kit';
 
