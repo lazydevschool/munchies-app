@@ -8,8 +8,6 @@ services:
     volumes:
       - /usr/src/app/node_modules
       - ./client/src:/usr/src/app/src
-    environment:
-      - DEBUG=*
     networks:
       - app-network
 
@@ -23,7 +21,6 @@ services:
       - ./auth-svc:/usr/src/app
       - /usr/src/app/node_modules
     environment:
-      - DEBUG=*
       - NODE_ENV=${NODE_ENV-production}
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
       - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
