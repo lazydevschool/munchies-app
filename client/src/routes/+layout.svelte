@@ -1,17 +1,31 @@
 <!-- src/routes/+layout.svelte -->
 <script>
-	import '../app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import { onMount } from 'svelte';
-	import { authStore } from '$lib/stores/authStore';
+    import '../app.css';
+    import Navbar from '$lib/components/Navbar.svelte';
+    import { browser } from '$app/environment';
+    import { authStore } from '$lib/stores/authStore';
 
-	export let data;
+    export let data;
 
-	onMount(() => {
+    $: if (browser) {
+        console.log('Setting auth state with:', data);
         authStore.initialize(data.authenticated);
-    });
-</script>
+        if (data.user?.username) {
+            console.log('Setting user in store:', data.user);
+            authStore.setUser({ username: data.user.username });
+        }
+    }
 
+    // Debug subscription
+    $: console.log('Current auth store value:', $authStore);
+</script>
+<!-- Debug display -->
+{#if browser}
+    <div class="p-2 bg-yellow-100">
+        <p>Layout Data: authenticated={data.authenticated}, username={data.user?.username ?? 'none'}</p>
+        <p>Store State: authenticated={$authStore.isAuthenticated}, username={$authStore.user?.username ?? 'none'}</p>
+    </div>
+{/if}
 <Navbar />
 
 <main class="container px-4 mx-auto mt-8">

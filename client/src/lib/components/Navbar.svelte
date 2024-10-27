@@ -19,7 +19,7 @@
 	<div class="container flex items-center justify-between mx-auto">
 		<a href="/" class="text-xl font-bold">Munchies App</a>
 		<div>
-			{#if $authStore}
+			{#if $authStore.isAuthenticated}
 				<!-- Authenticated User Links -->
 				<a href="/profile" class="mr-4 hover:text-gray-300">Profile</a>
 				<form
