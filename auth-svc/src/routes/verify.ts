@@ -6,6 +6,8 @@ import { verify } from 'hono/jwt';
 
 const router = new Hono();
 
+// TODO: how to handle scenario where refresh token is expired?  that means we need to clean up redis
+
 router.post('/', async (c) => {
   // access token values from cookie
   const { auth_token, refresh_token } = await getSignedCookie(
@@ -13,18 +15,31 @@ router.post('/', async (c) => {
     env.COOKIE_SECRET
   );
 
-  console.log('auth_token', auth_token);
-  console.log('refresh_token', refresh_token);
-
   if (!auth_token || !refresh_token) {
-    return c.json({ message: 'No token provided' });
+    return c.json(
+      {
+        valid: false,
+        message: 'No token provided',
+      },
+      401 // Unauthorized
+    );
   }
 
   try {
     const payload = await verify(auth_token, env.ACCESS_TOKEN_SECRET);
-    return c.json(payload);
+    return c.json(
+      {
+        username: payload.username,
+      },
+      200 // OK
+    );
   } catch (error) {
-    return c.json({ message: 'Invalid token' });
+    return c.json(
+      {
+        message: 'Invalid token',
+      },
+      401 // Unauthorized
+    );
   }
 });
 
