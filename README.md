@@ -41,8 +41,17 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
 ### Features
 
-- **protected route** (verify the cookies are protecting routes)
-- **refresh token mechanism**
+- create profile crud functionality as a protected route, handle protected route logic from server side
+- refresh token logic
+
+1. Add refreshToken method to ApiClient
+2. Implement refresh token flow
+3. Add refresh state management
+4. Test scenarios:
+    - Short-lived token expiration
+    - Automatic refresh
+    - Failed refresh handling
+    - Concurrent request handling
 
 - enhance auth service
   - email verification
@@ -73,3 +82,4 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 - login page w/ cookies being set
 - logout page (destroy cookies)
 - Show different navigation options based on authentication state
+- Impement basic protected routes (UX based not server side based)
