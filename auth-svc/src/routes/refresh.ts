@@ -37,6 +37,7 @@ router.post('/', async (c) => {
     // Create new access token
     const newAccessToken = await sign(
       {
+        id: payload.id,
         username,
         tokenOrigin: '/auth/refresh',
         exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes
@@ -47,6 +48,7 @@ router.post('/', async (c) => {
     // Create new refresh token
     const newRefreshToken = await sign(
       {
+        id: payload.id,
         username,
         tokenOrigin: '/auth/refresh',
         exp: Math.floor(Date.now() / 1000) + 15 * 24 * 60 * 60, // 15 days

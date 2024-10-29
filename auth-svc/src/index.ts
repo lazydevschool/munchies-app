@@ -14,7 +14,7 @@ import { verifyRouter } from '@/routes/verify';
 import { loginRouter } from '@/routes/login';
 import { signupRouter } from '@/routes/signup';
 import { refreshRouter } from '@/routes/refresh';
-
+import { profileRouter } from '@/routes/profile';
 const app = new Hono();
 app.use(logger());
 app.use(
@@ -32,6 +32,7 @@ app.route('/auth/verify', verifyRouter);
 app.route('/auth/login', loginRouter);
 app.route('/auth/signup', signupRouter);
 app.route('/auth/refresh', refreshRouter);
+app.route('/profile', profileRouter);
 
 async function startServer() {
   try {

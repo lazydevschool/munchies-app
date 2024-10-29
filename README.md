@@ -6,7 +6,7 @@
 # Build images and startup postgresql / redis / api
 docker compose up -d --build
 # Migrate database so users can register
-docker compose exec -it auth-svc pnpm push
+docker compose exec -it auth-svc pnpm db:update
 ```
 
 ## Reference

@@ -2,7 +2,10 @@
   "name": "auth-svc",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "push": "pnpm drizzle-kit push"
+    "push": "pnpm drizzle-kit push",
+    "generate": "pnpm drizzle-kit generate",
+    "db:update": "pnpm push && pnpm generate",
+    "studio": "pnpm drizzle-kit studio"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.1",

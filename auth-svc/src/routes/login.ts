@@ -34,6 +34,7 @@ router.post('/', async (c) => {
 
   // create payload for access token
   const accessTokenPayload = {
+    id: userFromDb[0].id,
     username,
     tokenOrigin: '/auth/login',
     // exp: Math.floor(Date.now() / 1000) + 300, // 5 minutes from now
@@ -42,6 +43,7 @@ router.post('/', async (c) => {
 
   // create payload for refresh token
   const refreshTokenPayload = {
+    id: userFromDb[0].id,
     username,
     tokenOrign: '/auth/login',
     exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 15 days from now
