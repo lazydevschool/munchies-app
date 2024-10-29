@@ -83,3 +83,7 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 - logout page (destroy cookies)
 - Show different navigation options based on authentication state
 - Impement basic protected routes (UX based not server side based)
+
+## Cursor TODO:
+
+- cursor context ignore
