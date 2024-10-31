@@ -2,7 +2,11 @@
 
 ## TODOS
 
-### Update Context / Routes with User binding where applicable
+### Refresh token
+
+- after 5 minutes i have to login again, i'd prefer to stay logged in and have the token automatically refresh.
+
+### Update Context / Routes with User binding where applicable make typescript hapy
 
 - similar to how the profile route is setup
 

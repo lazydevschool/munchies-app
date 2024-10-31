@@ -15,6 +15,7 @@ import { loginRouter } from '@/routes/login';
 import { signupRouter } from '@/routes/signup';
 import { refreshRouter } from '@/routes/refresh';
 import { profileRouter } from '@/routes/profile';
+
 const app = new Hono();
 app.use(logger());
 app.use(
