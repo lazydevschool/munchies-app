@@ -36,8 +36,22 @@
 		<div class="mb-2">
 			<strong>Cookies:</strong>
 			<ul class="ml-4 list-disc">
-				<li>Auth Token: {data.debugData.local.cookies.authToken}</li>
-				<li>Refresh Token: {data.debugData.local.cookies.refreshToken}</li>
+				<li>
+					Auth Token: {data.debugData.local.cookies.authToken.present}
+					{#if data.debugData.local.cookies.authToken.present === 'present'}
+						<span class="text-xs text-gray-500"
+							>(prefix: {data.debugData.local.cookies.authToken.value})</span
+						>
+					{/if}
+				</li>
+				<li>
+					Refresh Token: {data.debugData.local.cookies.refreshToken.present}
+					{#if data.debugData.local.cookies.refreshToken.present === 'present'}
+						<span class="text-xs text-gray-500"
+							>(prefix: {data.debugData.local.cookies.refreshToken.value})</span
+						>
+					{/if}
+				</li>
 			</ul>
 		</div>
 	</div>

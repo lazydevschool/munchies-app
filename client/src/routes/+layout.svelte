@@ -1,39 +1,41 @@
 <!-- src/routes/+layout.svelte -->
 <script>
-    import '../app.css';
-    import Navbar from '$lib/components/Navbar.svelte';
-    import { browser } from '$app/environment';
-    import { authStore } from '$lib/stores/authStore';
+	import '../app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import { browser } from '$app/environment';
+	import { authStore } from '$lib/stores/authStore';
 
-    export let data;
+	export let data;
 
-    $: if (browser) {
-        console.log('Setting auth state with:', data);
-        authStore.initialize(data.authenticated);
-        if (data.user?.username) {
-            console.log('Setting user in store:', data.user);
-            authStore.setUser({ username: data.user.username });
-        }
-    }
-
-    // Debug subscription
-    $: console.log('Current auth store value:', $authStore);
+	$: if (browser && data) {
+		// Only update store if data changes
+		if (
+			data.authenticated !== $authStore.isAuthenticated ||
+			data.user?.username !== $authStore.user?.username
+		) {
+			authStore.initialize(data.authenticated);
+			if (data.user?.username) {
+				authStore.setUser({ username: data.user.username });
+			} else {
+				authStore.clearUser();
+			}
+		}
+	}
 </script>
+
 <!-- Debug display -->
-{#if browser}
-    <div class="p-2 bg-yellow-100">
-        <p>Layout Data: authenticated={data.authenticated}, username={data.user?.username ?? 'none'}</p>
-        <p>Store State: authenticated={$authStore.isAuthenticated}, username={$authStore.user?.username ?? 'none'}</p>
-    </div>
+{#if browser && import.meta.env.DEV}
+	<div class="p-2 text-sm bg-yellow-100">
+		<p>Auth State: {data.authenticated ? '✅' : '❌'} {data.user?.username || 'Not logged in'}</p>
+	</div>
 {/if}
+
 <Navbar />
 
 <main class="container px-4 mx-auto mt-8">
-    <slot />
+	<slot />
 </main>
 
 <footer class="py-4 mt-8 bg-gray-100">
-    <div class="container mx-auto text-center">
-        © 2024 Munchies App. All rights reserved.
-    </div>
+	<div class="container mx-auto text-center">© 2024 Munchies App. All rights reserved.</div>
 </footer>

@@ -1,27 +1,25 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import type { ActionData } from './$types';
 	import { authStore } from '$lib/stores/authStore';
 
 	export let data;
-	let isEditing = false;
-	let formData = {
-		full_name: data.profile.full_name || '',
-		bio: data.profile.bio || '',
-		favorite_color: data.profile.favorite_color,
-		email: data.profile.email || ''
-	};
+	export let form: ActionData;
 
-	function handleSubmit() {
-		return async ({ result }) => {
+	let isEditing = false;
+	let formData = { ...data.profile };
+
+	const handleSubmit = () => {
+		return async ({ result, update }) => {
 			if (result.type === 'success') {
 				isEditing = false;
-				// Update the data with the new profile
-				if (result.data?.profile) {
-					data.profile = result.data.profile;
-				}
+				await update();
+			} else if (result.type === 'error') {
+				// If we get a 401, the page will automatically redirect due to layout.server.ts
+				console.error('Profile update failed:', result);
 			}
 		};
-	}
+	};
 </script>
 
 <svelte:head>
@@ -81,19 +79,22 @@
 					/>
 				</div>
 
-				<div class="flex gap-4">
+				<div class="flex justify-end space-x-4">
+					<button
+						type="button"
+						on:click={() => {
+							isEditing = false;
+							formData = { ...data.profile };
+						}}
+						class="px-4 py-2 font-bold text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:shadow-outline"
+					>
+						Cancel
+					</button>
 					<button
 						type="submit"
 						class="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
 					>
 						Save
-					</button>
-					<button
-						type="button"
-						on:click={() => (isEditing = false)}
-						class="px-4 py-2 font-bold text-gray-700 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:shadow-outline"
-					>
-						Cancel
 					</button>
 				</div>
 			</form>

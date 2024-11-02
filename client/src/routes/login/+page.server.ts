@@ -14,10 +14,8 @@ export const actions: Actions = {
 		const data = Object.fromEntries(await request.formData());
 
 		try {
-			// validate input
 			const { username, password } = loginSchema.parse(data);
 
-			// contact auth service
 			const response = await fetch('http://auth-svc:3000/auth/login', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
@@ -40,7 +38,6 @@ export const actions: Actions = {
 				cookies.set(name.trim(), rest.join('=').trim(), { path: '/' });
 			});
 
-			// redirect to a protected route
 			return {
 				success: true,
 				message: 'Login successful',

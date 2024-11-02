@@ -23,7 +23,13 @@ function createAuthStore() {
 				// user: null
 			}));
 		},
-		logout: () => set({ isAuthenticated: false, user: null })
+		logout: () => set({ isAuthenticated: false, user: null }),
+		clearUser: () => {
+			update((state) => ({
+				...state,
+				user: null
+			}));
+		}
 	};
 }
 
