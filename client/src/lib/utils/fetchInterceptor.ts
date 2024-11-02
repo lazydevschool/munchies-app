@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { authStore } from '$lib/stores/authStore';
+import { parseJwt } from './tokenUtils';
 
 let isRefreshing = false;
 let failedQueue: Array<{
@@ -34,7 +35,7 @@ function parseCookies(cookieString: string): Record<string, string> {
 }
 
 async function refreshTokens(currentCookies?: Record<string, string>) {
-	console.log('Attempting to refresh tokens with cookies:', currentCookies);
+	console.log('🔄 Starting token refresh with cookies:', currentCookies);
 
 	try {
 		const response = await fetch('http://auth-svc:3000/auth/refresh', {
@@ -46,11 +47,9 @@ async function refreshTokens(currentCookies?: Record<string, string>) {
 			}
 		});
 
-		console.log('Refresh response status:', response.status);
+		console.log('📥 Refresh response status:', response.status);
 
 		if (!response.ok) {
-			const errorText = await response.text();
-			console.error('Refresh failed:', errorText);
 			throw new Error('Token refresh failed');
 		}
 
@@ -59,12 +58,16 @@ async function refreshTokens(currentCookies?: Record<string, string>) {
 			throw new Error('No cookies received from refresh');
 		}
 
+		// Parse the new cookies
+		const newCookies = parseCookies(setCookieHeader);
+
 		return {
 			success: true,
-			cookies: setCookieHeader
+			cookies: newCookies,
+			rawCookies: setCookieHeader
 		};
 	} catch (error) {
-		console.error('Error during refresh:', error);
+		console.error('❌ Refresh failed:', error);
 		throw error;
 	}
 }
@@ -88,52 +91,37 @@ export async function fetchInterceptor(
 		});
 
 		if (response.status === 401 && currentCookies.refresh_token) {
-			if (isRefreshing) {
-				return new Promise((resolve, reject) => {
-					failedQueue.push({ resolve, reject });
-				});
-			}
+			console.log('🔄 Got 401, attempting refresh');
 
-			isRefreshing = true;
+			const refreshResult = await refreshTokens(currentCookies);
 
-			try {
-				const refreshResult = await refreshTokens(currentCookies);
-				const newCookies = parseCookies(refreshResult.cookies);
-				processQueue(null, refreshResult.cookies);
+			// Retry the original request with new tokens
+			const retryResponse = await fetch(input, {
+				...requestInit,
+				headers: {
+					...requestInit.headers,
+					Cookie: Object.entries(refreshResult.cookies)
+						.map(([name, value]) => `${name}=${value}`)
+						.join('; ')
+				}
+			});
 
-				// Create new request with refreshed tokens
-				const newResponse = await fetch(input, {
-					...requestInit,
-					headers: {
-						...requestInit.headers,
-						Cookie: Object.entries(newCookies)
-							.map(([name, value]) => `${name}=${value}`)
-							.join('; ')
-					}
-				});
+			// Create a new response with the refresh cookies
+			const finalResponse = new Response(retryResponse.body, {
+				status: retryResponse.status,
+				statusText: retryResponse.statusText,
+				headers: new Headers({
+					...Object.fromEntries(retryResponse.headers.entries()),
+					'Set-Cookie': refreshResult.rawCookies
+				})
+			});
 
-				// Return response with new cookies in headers
-				const modifiedResponse = new Response(newResponse.body, {
-					status: newResponse.status,
-					statusText: newResponse.statusText,
-					headers: new Headers({
-						...Object.fromEntries(newResponse.headers.entries()),
-						'Set-Cookie': refreshResult.cookies
-					})
-				});
-
-				return modifiedResponse;
-			} catch (error) {
-				processQueue(error, null);
-				throw error;
-			} finally {
-				isRefreshing = false;
-			}
+			return finalResponse;
 		}
 
 		return response;
 	} catch (error) {
-		console.error('FetchInterceptor error:', error);
+		console.error('❌ fetchInterceptor error:', error);
 		throw error;
 	}
 }

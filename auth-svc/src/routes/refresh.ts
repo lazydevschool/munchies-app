@@ -40,7 +40,8 @@ router.post('/', async (c) => {
         id: payload.id,
         username,
         tokenOrigin: '/auth/refresh',
-        exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes
+        //exp: Math.floor(Date.now() / 1000) + 900, // 15 minutes
+        exp: Math.floor(Date.now() / 1000) + 5, // 5 seconds
       },
       env.ACCESS_TOKEN_SECRET
     );
@@ -83,7 +84,7 @@ router.post('/', async (c) => {
         sameSite: 'Strict',
       }
     );
-
+    console.log('Tokens refreshed successfully');
     return c.json({ message: 'Tokens refreshed successfully' });
   } catch (error) {
     console.error('Error refreshing tokens:', error);

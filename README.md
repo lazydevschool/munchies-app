@@ -28,6 +28,8 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
 ## Features / Bugs (TODO Items)
 
+- review codebase for any cleanup / refactoring
+- switch svelte code to version 5 (currently using version 4)
 - CSRF protection
 - rate limit (login / signup) to prevent abuse
 - logging and monitoring for failed login attempts

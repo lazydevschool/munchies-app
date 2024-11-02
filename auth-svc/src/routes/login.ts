@@ -38,7 +38,7 @@ router.post('/', async (c) => {
     username,
     tokenOrigin: '/auth/login',
     // exp: Math.floor(Date.now() / 1000) + 300, // 5 minutes from now
-    exp: Math.floor(Date.now() / 1000) + 15, // 15 seconds from now
+    exp: Math.floor(Date.now() / 1000) + 5, // 5 seconds from now
   };
 
   // create payload for refresh token

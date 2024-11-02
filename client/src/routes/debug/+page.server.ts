@@ -53,13 +53,15 @@ export const load: PageServerLoad = async ({ fetch, cookies, url }) => {
 			cookies: {
 				authToken: {
 					present: updatedAuthToken ? 'present' : 'missing',
-					value: updatedAuthToken?.split('.')[0] || 'none', // Just show first part for safety
-					changed: updatedAuthToken !== authToken
+					value: updatedAuthToken || 'none',
+					changed: updatedAuthToken !== authToken,
+					prefix: updatedAuthToken?.split('.')[0] || 'none'
 				},
 				refreshToken: {
 					present: updatedRefreshToken ? 'present' : 'missing',
-					value: updatedRefreshToken?.split('.')[0] || 'none',
-					changed: updatedRefreshToken !== refreshToken
+					value: updatedRefreshToken || 'none',
+					changed: updatedRefreshToken !== refreshToken,
+					prefix: updatedRefreshToken?.split('.')[0] || 'none'
 				}
 			},
 			request: {

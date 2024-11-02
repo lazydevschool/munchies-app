@@ -33,8 +33,14 @@ export const actions: Actions = {
 				return fail(400, { message: 'No cookies set' });
 			}
 
+			console.log('🔑 Received cookies during login:', setCookieHeader);
 			setCookieHeader.split(',').forEach((cookie) => {
 				const [name, ...rest] = cookie.split('=');
+
+				if (name.trim() === 'auth_token' || name.trim() === 'refresh_token') {
+					console.log(`🔑 Setting cookie: ${name.trim()} = ${rest.join('=').trim()}`);
+				}
+
 				cookies.set(name.trim(), rest.join('=').trim(), { path: '/' });
 			});
 
