@@ -9,6 +9,10 @@ docker compose up -d --build
 docker compose exec -it auth-svc pnpm db:update
 ```
 
+## Todos
+
+- [https://trello.com/b/Ay4MkAPN/munchies-app](https://trello.com/b/Ay4MkAPN/munchies-app)
+
 ## Reference
 
 - Generate a random string
@@ -26,66 +30,13 @@ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 - Uses Argon2 for secure password hashing
 - environment variable validation using Zod
 
-## Features / Bugs (TODO Items)
+## Client Service
 
-- review codebase for any cleanup / refactoring
-- switch svelte code to version 5 (currently using version 4)
-- CSRF protection
-- rate limit (login / signup) to prevent abuse
-- logging and monitoring for failed login attempts
-- central error handling
-- `auth-svc` automated tests
-- document api endpoints
-
-## Client
-
-- [Setup Tailwind CSS](https://tailwindcss.com/docs/guides/sveltekit)
-
-### Features
-
-- create profile crud functionality as a protected route, handle protected route logic from server side
-- refresh token logic
-
-1. Add refreshToken method to ApiClient
-2. Implement refresh token flow
-3. Add refresh state management
-4. Test scenarios:
-    - Short-lived token expiration
-    - Automatic refresh
-    - Failed refresh handling
-    - Concurrent request handling
-
-- enhance auth service
-  - email verification
-  - password reset
-
-- enhance user profile page
-  - allow editing of user information
-
-### Refactor Ideas
-
-- show signup option on login page / login option on signup page
-- build docker cache so pnpm will work right
-- setting auth api endpoint as env.meta....AUTH_SERVICE_URL
-- code cleanup / audit the workflow for simplicity
-- Signup success or fail toast
-- format signup form to match similar to login theme
-- refactor forms to usesuper forms
-- automated tests
-- RBAC (customers vs restaurant owners)
-
-### Completed
-
-- setup tailwind
-- docker compose setup
-- basic pages / basic nav
-- santity check that client can hit auth-service by showing the debug route
-- signup
-- login page w/ cookies being set
-- logout page (destroy cookies)
-- Show different navigation options based on authentication state
-- Impement basic protected routes (UX based not server side based)
-
-## Cursor TODO:
-
-- cursor context ignore
+- SvelteKit app using Svelte 4
+- Tailwind CSS
+- JWT token refresh logic
+- Routes
+  - Auth / Login
+  - Auth / Signup
+  - Auth / Logout
+  - Profile

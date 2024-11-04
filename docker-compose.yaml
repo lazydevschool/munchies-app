@@ -6,6 +6,7 @@ services:
     ports:
       - '5173:5173'
     volumes:
+      - pnpm_store_cache:/pnpm/store
       - /usr/src/app/node_modules
       - ./client/src:/usr/src/app/src
     networks:
@@ -18,6 +19,7 @@ services:
     ports:
       - '3333:3000'
     volumes:
+      - pnpm_store_cache:/pnpm/store
       - ./auth-svc:/usr/src/app
       - /usr/src/app/node_modules
     environment:
@@ -52,6 +54,7 @@ services:
 
 volumes:
   postgres_data:
+  pnpm_store_cache:
 
 networks:
   auth-network:
