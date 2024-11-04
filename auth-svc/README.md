@@ -1,10 +1,6 @@
-# Auth-Svc
+# Munchies App - Auth Service
 
 ## TODOS
-
-### Refresh token
-
-- after 5 minutes i have to login again, i'd prefer to stay logged in and have the token automatically refresh.
 
 ### Update Context / Routes with User binding where applicable make typescript hapy
 
@@ -54,7 +50,7 @@ export async function rateLimitMiddleware(
 }
 ```
 
-follow up question: where should this go?
+Follow up question: where should this go?
 
 ### Security Headers
 
@@ -89,14 +85,14 @@ export async function errorHandler(c: Context, next: Next) {
     console.error('Error:', error);
 
     if (error instanceof ZodError) {
-      return c.json({ 
-        message: 'Validation error', 
-        errors: error.errors 
+      return c.json({
+        message: 'Validation error',
+        errors: error.errors
       }, 400);
     }
 
-    return c.json({ 
-      message: 'Internal server error' 
+    return c.json({
+      message: 'Internal server error'
     }, 500);
   }
 }
@@ -112,7 +108,7 @@ import { Context, Next } from 'hono';
 export async function requestLogger(c: Context, next: Next) {
   const start = Date.now();
   const { method, url } = c.req;
-  
+
   await next();
 
   const ms = Date.now() - start;
@@ -141,8 +137,8 @@ app.use('/profile', rateLimitMiddleware(300, 3600)); // 300 requests per hour
 
 // CORS configuration
 app.use('*', cors({
-  origin: env.NODE_ENV === 'production' 
-    ? env.FRONTEND_URL 
+  origin: env.NODE_ENV === 'production'
+    ? env.FRONTEND_URL
     : '*',
   credentials: true,
   exposeHeaders: ['x-csrf-token'],
@@ -196,7 +192,7 @@ export class ProfileService {
       .from(profiles)
       .where(eq(profiles.user_id, userId))
       .limit(1);
-    
+
     return profile[0];
   }
 
@@ -209,7 +205,7 @@ export class ProfileService {
       })
       .where(eq(profiles.user_id, userId))
       .returning();
-    
+
     return updated[0];
   }
 }
